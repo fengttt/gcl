@@ -1,4 +1,4 @@
-package common
+package gcl
 
 import (
 	"log"
@@ -17,6 +17,7 @@ func init() {
 		pair := strings.SplitN(e, "=", 2)
 		// if pair[0] starts with KO_,
 		if strings.HasPrefix(pair[0], "KO_") {
+
 			koVar[pair[0]] = pair[1]
 		}
 	}

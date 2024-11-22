@@ -8,9 +8,9 @@ import (
 
 func TestLazyList(t *testing.T) {
 	const (
-		loopCnt = 1000
-		thCnt   = 10
-		kRange  = 20
+		loopCnt  = 1000
+		thCnt    = 10
+		keyRange = 20
 	)
 
 	list := NewLazyList[int64, int64](
@@ -35,27 +35,27 @@ func TestLazyList(t *testing.T) {
 		go func(ii int) {
 			defer wg.Done()
 			for j := 0; j < loopCnt; j++ {
-				ikey := rand.Int63() % kRange
+				ikey := rand.Int63() % keyRange
 				ok := list.Add(ikey, int64(ii))
 				if ok {
-					results[ii].insOk += 1
+					results[ii].insOk++
 				} else {
-					results[ii].insMiss += 1
+					results[ii].insMiss++
 				}
 
 				ival, lkok := list.Lookup(ikey)
 				if lkok {
-					results[ii].lookupOk += 1
+					results[ii].lookupOk++
 				} else {
-					results[ii].lookupMiss += 1
+					results[ii].lookupMiss++
 				}
 
 				if lkok && ival != int64(ii) {
 					delOk := list.Remove(ikey)
 					if delOk {
-						results[ii].remOk += 1
+						results[ii].remOk++
 					} else {
-						results[ii].remMiss += 1
+						results[ii].remMiss++
 					}
 				}
 			}
@@ -64,10 +64,10 @@ func TestLazyList(t *testing.T) {
 	wg.Wait()
 
 	cnt := 0
-	for x := int64(0); x < kRange; x++ {
+	for x := int64(0); x < keyRange; x++ {
 		_, ok := list.Lookup(x)
 		if ok {
-			cnt += 1
+			cnt++
 		}
 	}
 

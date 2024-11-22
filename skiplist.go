@@ -232,10 +232,25 @@ func (lsl *Skiplist[K, V]) Lookup(k K) (V, bool) {
 	return lsl.head.val, false
 }
 
-func (lsl *Skiplist[K, V]) First() *SkNode[K, V] {
-	first := lsl.head.next[0].Load()
-	if first == lsl.tail {
-		return nil
+func (lsl *Skiplist[K, V]) Next(curr *SkNode[K, V]) *SkNode[K, V] {
+	var next *SkNode[K, V]
+	if curr == nil {
+		next = lsl.head.next[0].Load()
+	} else {
+		next = curr.next[0].Load()
 	}
-	return first
+
+	for {
+		if next == lsl.tail {
+			return nil
+		}
+		if !next.marked.Load() {
+			return next
+		}
+		next = next.next[0].Load()
+	}
+}
+
+func (lsl *Skiplist[K, V]) First() *SkNode[K, V] {
+	return lsl.Next(nil)
 }

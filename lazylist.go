@@ -26,18 +26,21 @@ func (n *lzNode[K, V]) isNotMarked() bool {
 	return !n.marked.Load()
 }
 
+// LzIter is an iterator for LazyList
 type LzIter[K any, V any] struct {
 	// range [ka, kz)
 	ka, kz K
 	curr   *lzNode[K, V]
 }
 
-func (i LzIter[K, V]) GetKey() K {
-	return i.curr.key
+// GetKey returns the key of the current node of the iterator
+func (it *LzIter[K, V]) GetKey() K {
+	return it.curr.key
 }
 
-func (i LzIter[K, V]) GetValue() V {
-	return i.curr.value
+// GetValue returns the value of the current node of the iterator
+func (it *LzIter[K, V]) GetValue() V {
+	return it.curr.value
 }
 
 type LazyList[K any, V any] struct {

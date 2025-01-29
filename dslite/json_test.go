@@ -10,7 +10,7 @@ import (
 )
 
 func TestJt(t *testing.T) {
-	db, err := OpenDB(":memory:")
+	db, err := OpenDB("./test.db")
 	if err != nil {
 		t.Error("Cannot open database", err)
 	}
@@ -22,6 +22,7 @@ func TestJt(t *testing.T) {
 	}
 	fmt.Println("SQLite version: ", ver)
 
+	gcl.Must(db.Exec("drop table if exists jt"))
 	gcl.Must(db.Exec("create table jt (i int, j text)"))
 	gcl.Must(db.Exec(`insert into jt values (1, '{"a": 1, "b": 2}')`))
 	gcl.Must(db.Exec(`insert into jt values (2, '{"a": "a"}')`))
